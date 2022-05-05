@@ -10,8 +10,8 @@ spec:
   selector:
     app: webapp
   ports:
-    - port: 80
-      targetPort: 80
+    - name: http
+      port: 80
       nodePort: 30080
 
 ---
@@ -21,12 +21,38 @@ metadata:
   name: fleetman-queue
 spec:
   type: NodePort
-  # this defines which pod are going to be represented by the service
-  # network endpoint for other services or end users
-
   selector:
     app: queue
   ports:
-    - port: 8161
-      targetPort: 8161
+    - name: http
+      port: 8161
       nodePort: 30010
+
+    - name: endpoint
+      port: 61616
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleetman-position-tracker
+spec:
+  type: ClusterIP
+  selector:
+    app: position-tracker
+  ports:
+    - name: http
+      port: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleetman-api-gateway
+spec:
+  type: ClusterIP
+  selector:
+    app: api-gateway
+  ports:
+    - name: http
+      port: 8080
