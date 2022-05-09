@@ -1,9 +1,11 @@
+# the storage that is needed
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mongo-pvc
 spec:
-  storageClassName: mylocalstorage
+  #  binding process takes place to match all that match the spec requirements
+  storageClassName: mylocalstorage # to determine what type of storage that is needed (SSD / HDD type of storage)
   accessModes:
     - ReadWriteOnce
   resources:
@@ -11,6 +13,7 @@ spec:
       storage: 20Gi
 
 ---
+# the storage that is implemented
 apiVersion: v1
 kind: PersistentVolume
 metadata:

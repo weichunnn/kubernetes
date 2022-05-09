@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: mongodb
 spec:
-  # minReadySeconds: 30
   replicas: 1
   selector:
     matchLabels:
