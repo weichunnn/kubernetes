@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: queue
+spec:
+  selector:
+    matchLabels:
+      app: queue
+  replicas: 2
+  template: # template for the pods
+    metadata:
+      labels:
+        app: queue
+    spec:
+      containers:
+        - name: queue
+          image: richardchesterwood/k8s-fleetman-queue:release2
+          resources:
+            requests:
+              memory: 300Mi # for this container - it needs 300 Mb of memory allocated to it
+              cpu: 1000m # pods can still go above the cpu as this is not a limit, just a requirement (100m = 0.1 CPU)
