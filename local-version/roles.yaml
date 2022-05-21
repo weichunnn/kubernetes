@@ -1,0 +1,51 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: new-joiner
+rules:
+  - apiGroups: ["", "apps", "autoscaling", "extensions"] # blank refer to core group, however deployment is not in the core api group, it is in the apps api group
+    resources: ["*"] # can be of pods, services, NOT deployment (if apps is included, then deployment is allowed)
+    verbs: ["get", "list", "watch"]
+
+---
+# allows us to put users into role
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: users-into-new-joiners
+subjects:
+  # list users into this role
+  - kind: User
+    name: francis-linux-login-name
+roleRef:
+  kind: ClusterRole
+  name: new-joiner
+  apiGroup: rbac.authorization.k8s.io
+
+# for allowing user to play with their own namespace -> playground
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: new-joiner
+  namespace: playground
+rules:
+  - apiGroups: ["", "apps", "scaling"]
+    resources: ["*"]
+    verbs: ["*"]
+
+---
+# allows us to put users into role
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: new-joiners-role-binding
+  namespace: playground
+subjects:
+  # list users into this role
+  - kind: User
+    name: francis-linux-login-name
+roleRef:
+  kind: RoleBinding
+  name: new-joiner
+  apiGroup: rbac.authorization.k8s.io
