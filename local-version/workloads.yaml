@@ -40,6 +40,18 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: production-microservice
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: global-database-config
+                  key: database.url
+          volumeMounts:
+            - name: database-config-volume
+              mountPath: /etc/any/directory/config
+      volumes:
+        - name: database-config-volume
+          configMap:
+            name: global-database-config
 
 ---
 apiVersion: apps/v1
